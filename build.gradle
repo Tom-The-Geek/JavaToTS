@@ -53,7 +53,7 @@ publishing {
             name = "GitHub-Packages"
             url = "https://maven.pkg.github.com/Geek202/maven"
             credentials {
-                username = System.getenv("GITHUB_USERNAME")
+                //username = System.getenv("GITHUB_USERNAME")
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
