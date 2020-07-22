@@ -51,7 +51,7 @@ publishing {
     repositories {
         maven {
             name = "GitHub-Packages"
-            url = "https://maven.pkg.github.com/Geek202/maven"
+            url = "https://maven.pkg.github.com/Geek202/JavaToTS"
             credentials {
                 username = System.getenv("GITHUB_USERNAME")
                 password = System.getenv("GITHUB_TOKEN")
