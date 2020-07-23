@@ -24,8 +24,8 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Publish to GHPackages
+    - name: Publish to maven repo
       run: ./gradlew publish
       env:
-        GITHUB_USERNAME: github-actions
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        MAVEN_USERNAME: buildslave
+        MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
