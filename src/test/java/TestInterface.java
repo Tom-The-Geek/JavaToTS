@@ -1,3 +1,6 @@
+/**
+ * This is an interface I use for testing!
+ */
 public interface TestInterface {
 
     /**

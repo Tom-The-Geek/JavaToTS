@@ -6,6 +6,8 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import me.geek.tom.gradletools.utils.api.ApiClass;
 import me.geek.tom.gradletools.utils.api.ApiMethod;
@@ -20,6 +22,7 @@ public class JavaInputReader extends VoidVisitorAdapter<Void> {
     private final List<ApiMethod> methods = new ArrayList<>();
     private String name;
     private boolean hasMethods;
+    private String javaDoc;
 
     public static Optional<ApiClass> visitClass(Path path, List<ApiMethod> globals) throws IOException {
         File file = path.toFile();
@@ -31,11 +34,10 @@ public class JavaInputReader extends VoidVisitorAdapter<Void> {
         List<ApiMethod> methods = reader.methods;
 
         if (reader.hasMethods) {
-            //System.out.println(file + " is interface");
             ApiClass cls = new ApiClass(
                     reader.name,
-                    methods
-            );
+                    methods,
+                    reader.javaDoc);
             return Optional.of(cls);
         } else {
             globals.addAll(methods);
@@ -47,7 +49,10 @@ public class JavaInputReader extends VoidVisitorAdapter<Void> {
     public void visit(ClassOrInterfaceDeclaration n, Void arg) {
         name = n.getNameAsString();
         hasMethods = true;
-        //System.out.println("Visit " + (isInterface ? "interface" : "class") + name);
+
+        Optional<JavadocComment> optionalJavadocComment = n.getJavadocComment();
+        javaDoc = optionalJavadocComment.map(Comment::getContent).orElse(null);
+
         super.visit(n, arg);
     }
 
@@ -64,13 +69,18 @@ public class JavaInputReader extends VoidVisitorAdapter<Void> {
             }
         }
 
+        Optional<JavadocComment> optionalJavadocComment = md.getJavadocComment();
+        String javaDoc;
+        javaDoc = optionalJavadocComment.map(Comment::getContent).orElse(null);
+
         if (md.getModifiers().stream().anyMatch(m -> m.getKeyword().asString().equals("static"))) {
             //System.out.println("Found static method " + md.getNameAsString() + ". Adding to list!");
             methods.add(
                     new ApiMethod(
                             md.getNameAsString(),
                             md.getTypeAsString(),
-                            params
+                            params,
+                            javaDoc
                     )
             );
             hasMethods = false;
@@ -81,7 +91,8 @@ public class JavaInputReader extends VoidVisitorAdapter<Void> {
                     new ApiMethod(
                             md.getNameAsString(),
                             md.getTypeAsString(),
-                            params
+                            params,
+                            javaDoc
                     )
             );
         }
