@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'eclipse'
+    id 'java-gradle-plugin'
 }
 
 group 'me.geek.tom'
@@ -33,6 +34,15 @@ project.extensions.eclipse.classpath.file.whenMerged { Classpath cp ->
             if (type == 'api') type = 'core-api' //Gradle name is different for cores
             if (type == '') type = 'core'
             entry.sourcePath = new FileReferenceFactory().fromPath(gradleSrc + type)
+        }
+    }
+}
+
+gradlePlugin {
+    plugins {
+        javaToTS {
+            id = "me.geek.tom.javatots"
+            implementationClass = "me.geek.tom.gradletools.JavaToTSPlugin"
         }
     }
 }
