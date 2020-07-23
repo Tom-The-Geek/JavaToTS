@@ -4,7 +4,6 @@ import me.geek.tom.gradletools.JavaToTSExtension;
 import me.geek.tom.gradletools.generator.TypeScriptGenerator;
 import me.geek.tom.gradletools.utils.api.ApiDefinition;
 import org.gradle.api.DefaultTask;
-import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.TaskAction;
 
 import java.io.File;
@@ -29,7 +28,6 @@ public class GenerateDefinitionTask extends DefaultTask {
         }
     }
 
-    @Internal
     private JavaToTSExtension getExtension() {
         return getProject().getExtensions().getByType(JavaToTSExtension.class);
     }
