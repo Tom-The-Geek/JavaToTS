@@ -50,11 +50,11 @@ publishing {
 
     repositories {
         maven {
-            name = "GitHub-Packages"
-            url = "https://maven.pkg.github.com/Geek202/JavaToTS"
+            name = "TomTheGeek-Repo"
+            url = "http://maven-upload.tomthegeek.ml/"
             credentials {
-                username = System.getenv("GITHUB_USERNAME")
-                password = System.getenv("GITHUB_TOKEN")
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
             }
         }
     }
